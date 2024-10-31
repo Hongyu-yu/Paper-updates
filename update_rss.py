@@ -77,7 +77,7 @@ def translate_text(text, retry_count=3):
             translated = tss.translate_text(
                 text,
                 to_language='zh',
-                translator='bing'
+                translator='alibaba'
             )
             time.sleep(1)
             return translated
@@ -121,8 +121,8 @@ def format_content(entry):
     if hasattr(entry, 'summary'):
         # content += f"## Original Summary\n{entry.summary}\n\n"
         summary_zh = translate_text(entry.summary)
-        if summary_zh != entry.summary:
-            content += f"## 摘要翻译\n{summary_zh}\n\n"
+        # if summary_zh != entry.summary:
+        content += f"## 摘要翻译\n{summary_zh}\n\n"
     
     return content
 
