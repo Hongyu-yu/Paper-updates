@@ -62,7 +62,7 @@ ML_KEYWORDS = [
 # GitHub配置
 GITHUB_TOKEN = os.getenv('MY_GITHUB_TOKEN')
 REPO_NAME = "Hongyu-yu/Paper-updates"
-TIMEZONE = pytz.timezone('Asia/Shanghai')
+TIMEZONE = pytz.timezone('UTC')
 
 def translate_text(text, retry_count=3):
     """翻译文本，带有重试机制"""
