@@ -77,7 +77,7 @@ def translate_text(text, retry_count=3):
             translated = tss.translate_text(
                 text,
                 to_language='zh',
-                translator='alibaba'
+                translator='bing'
             )
             time.sleep(1)
             return translated
