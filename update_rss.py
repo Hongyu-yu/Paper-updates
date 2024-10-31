@@ -129,13 +129,12 @@ def format_content(entry):
     
     content = f"# {title}\n\n"
     if title_zh != title:
-        content += f"## 标题翻译\n{title_zh}\n\n"
+        content += f"## {title_zh}\n\n"
     
-    content += f"Date: {date}\n\n"
     content += f"Link: {entry.link}\n\n"
     
     if hasattr(entry, 'summary'):
-        content += f"## Original Summary\n{entry.summary}\n\n"
+        # content += f"## Original Summary\n{entry.summary}\n\n"
         summary_zh = translate_text(entry.summary)
         if summary_zh != entry.summary:
             content += f"## 摘要翻译\n{summary_zh}\n\n"
