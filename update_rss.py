@@ -13,6 +13,8 @@ RSS_FEEDS = [
     "https://www.nature.com/nchem.rss",
     "http://www.nature.com/nphys/journal/vaop/ncurrent/rss.rdf",
     "https://www.nature.com/npjcompumats.rss",
+    "https://academic.oup.com/rss/site_5332/3198.xml",
+    "https://rss.sciencedirect.com/publication/science/20959273",
     'https://www.pnas.org/rss/Physics.xml',
     'https://www.pnas.org/rss/Applied_Physical_Sciences.xml',
     "https://pubs.acs.org/action/showFeed?type=axatoc&feed=rss&jc=jctcce",
