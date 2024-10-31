@@ -44,7 +44,7 @@ from datetime import datetime
 import re
 from github import Github
 import pytz
-import translators as ts
+import translators as tss
 import time
 
 # 配置参数
@@ -54,14 +54,25 @@ GITHUB_TOKEN = os.getenv('MY_GITHUB_TOKEN')  # 从环境变量获取token
 REPO_NAME = "Hongyu-yu/Paper-updates"
 TIMEZONE = pytz.timezone('Asia/Shanghai')
 
+
 def translate_text(text, retry_count=3):
     """翻译文本，带有重试机制"""
+    if not text:
+        return text
+        
+    # 如果文本已经是中文，则不进行翻译
+    if any('\u4e00' <= char <= '\u9fff' for char in text):
+        return text
+        
     for i in range(retry_count):
         try:
-            # 如果文本已经是中文，则不进行翻译
-            if any('\u4e00' <= char <= '\u9fff' for char in text):
-                return text
-            translated = ts.google(text, to_language='zh')
+            # 使用 translators.server 中的翻译服务
+            # 这里使用 bing 翻译服务，也可以换成其他服务如 'baidu', 'alibaba', 'tencent'
+            translated = tss.translate_text(
+                text,
+                to_language='zh',
+                translator='bing'  # 或使用其他翻译服务
+            )
             time.sleep(1)  # 添加延迟以避免请求过快
             return translated
         except Exception as e:
