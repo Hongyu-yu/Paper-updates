@@ -127,7 +127,7 @@ def format_content(entry):
     return content
 
 def main():
-     g = Github(GITHUB_TOKEN)
+    g = Github(GITHUB_TOKEN)
     repo = g.get_repo(REPO_NAME)
     
     now = datetime.now(TIMEZONE)
