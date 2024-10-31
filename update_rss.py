@@ -145,13 +145,13 @@ def main():
             
             for entry in feed.entries:
                 # 获取 entry 的发布日期
-                if 'dc_date' in entry:
-                    entry_date = datetime.strptime(entry.dc_date, "%Y-%m-%dT%H:%M:%S%z").date()
-                elif 'published_parsed' in entry:
+                if 'published_parsed' in entry:
                     entry_date = datetime(*entry.published_parsed[:6]).date()
+                elif 'updated_parsed' in entry:
+                    entry_date = datetime(*entry.updated_parsed[:6]).date()
                 else:
-                    # 如果没有日期信息，跳过这个 entry
-                    continue
+                    # 如果没有日期信息，直接读取这个 entry
+                    entry_date = now.date()
                 
                 # 检查是否是今天的内容
                 if entry_date == now.date():
