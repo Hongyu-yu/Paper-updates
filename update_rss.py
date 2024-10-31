@@ -127,7 +127,7 @@ def format_content(entry):
     return content
 
 def main():
-    g = Github(GITHUB_TOKEN)
+     g = Github(GITHUB_TOKEN)
     repo = g.get_repo(REPO_NAME)
     
     now = datetime.now(TIMEZONE)
@@ -144,19 +144,30 @@ def main():
             print(f"Processing feed: {feed_url}")
             
             for entry in feed.entries:
-                title = entry.get('title', '')
-                description = entry.get('description', '')
+                # 获取 entry 的发布日期
+                if 'dc_date' in entry:
+                    entry_date = datetime.strptime(entry.dc_date, "%Y-%m-%dT%H:%M:%S%z").date()
+                elif 'published_parsed' in entry:
+                    entry_date = datetime(*entry.published_parsed[:6]).date()
+                else:
+                    # 如果没有日期信息，跳过这个 entry
+                    continue
                 
-                # 确定文章类别
-                category = get_category(title, description)
-                if category:
-                    formatted_content = format_content(entry)
-                    if category == "ferro":
-                        ferro_content.append(formatted_content)
-                    elif category == "ML":
-                        ml_content.append(formatted_content)
-                    print(f"Found {category} content: {title}")
+                # 检查是否是今天的内容
+                if entry_date == now.date():
+                    title = entry.get('title', '')
+                    description = entry.get('description', '')
                     
+                    # 确定文章类别
+                    category = get_category(title, description)
+                    if category:
+                        formatted_content = format_content(entry)
+                        if category == "ferro":
+                            ferro_content.append(formatted_content)
+                        elif category == "ML":
+                            ml_content.append(formatted_content)
+                        print(f"Found {category} content: {title}")
+                
         except Exception as e:
             print(f"Error processing feed {feed_url}: {str(e)}")
     

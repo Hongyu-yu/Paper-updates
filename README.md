@@ -1,2 +1,2 @@
 # Paper-updates
-Updates paper everyday based on RSS and interesting topics
+Updates paper about AI for science and ferro materials everyday based on RSS.
