@@ -36,6 +36,7 @@ RSS_FEEDS = [
     # 添加更多RSS源
 ]
 
+from datetime import date, timedelta
 import feedparser
 import os
 from datetime import datetime
@@ -105,8 +106,6 @@ def get_category(title, description):
 
 def format_content(entry):
     """格式化文章内容"""
-    date = datetime.now(TIMEZONE).strftime("%Y-%m-%d")
-    
     title = entry.title
     title_zh = translate_text(title)
     
@@ -124,7 +123,12 @@ def format_content(entry):
     
     return content
 
-def main():
+def main(target_date):
+    # ... (其他代码保持不变)
+    
+    year_month = target_date.strftime("%Y-%m")
+    today = target_date.strftime("%Y-%m-%d")
+
     g = Github(GITHUB_TOKEN)
     repo = g.get_repo(REPO_NAME)
     
@@ -142,18 +146,20 @@ def main():
             print(f"Processing feed: {feed_url}")
             
             for entry in feed.entries:
-                title = entry.get('title', '')
-                description = entry.get('description', '')
-                
-                # 确定文章类别
-                category = get_category(title, description)
-                if category:
-                    formatted_content = format_content(entry)
-                    if category == "ferro":
-                        ferro_content.append(formatted_content)
-                    elif category == "ML":
-                        ml_content.append(formatted_content)
-                    print(f"Found {category} content: {title}")
+                entry_date = datetime(*entry.published_parsed[:6]).date()
+                if entry_date == target_date:
+                    title = entry.get('title', '')
+                    description = entry.get('description', '')
+                    
+                    # 确定文章类别
+                    category = get_category(title, description)
+                    if category:
+                        formatted_content = format_content(entry)
+                        if category == "ferro":
+                            ferro_content.append(formatted_content)
+                        elif category == "ML":
+                            ml_content.append(formatted_content)
+                        print(f"Found {category} content: {title}")
                     
         except Exception as e:
             print(f"Error processing feed {feed_url}: {str(e)}")
@@ -209,4 +215,11 @@ def main():
         print("No relevant content found today")
 
 if __name__ == "__main__":
-    main()
+    current_date = date.today()
+    start_date = date(current_date.year, 1, 1)
+    
+    while start_date <= current_date:
+        print(f"Processing date: {start_date}")
+        main(start_date)
+        start_date += timedelta(days=1)
+        time.sleep(5)
