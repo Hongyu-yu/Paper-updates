@@ -178,15 +178,15 @@ def main():
             
             try:
                 # 确保类别文件夹存在
-                folder_path = f"content/{category}/{year_month}"
+                folder_path = f"{category}/{year_month}"
                 try:
                     repo.get_contents(folder_path)
                 except:
                     try:
-                        repo.get_contents(f"content/{category}")
+                        repo.get_contents(f"{category}")
                     except:
                         repo.create_file(
-                            f"content/{category}/.gitkeep",
+                            f"{category}/.gitkeep",
                             f"Create folder for {category}",
                             ""
                         )
