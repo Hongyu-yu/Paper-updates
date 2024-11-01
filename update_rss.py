@@ -64,7 +64,7 @@ ML_KEYWORDS = [
 
 DFT_KEYWORDS = [
     "NONADABATIC",
-    "density functional",
+    "QUANTUM DYNAMICS",
     "TDDFT",
     "TIME DEPENDENT DENSITY",
 ]
@@ -139,9 +139,10 @@ def format_content(entry):
     
     if hasattr(entry, 'summary'):
         # content += f"## Original Summary\n{entry.summary}\n\n"
-        summary_zh = translate_text(entry.summary)
+        # summary = translate_text(entry.summary)
+        summary = entry.summary
         # if summary_zh != entry.summary:
-        content += f"{summary_zh}\n\n"
+        content += f"{summary}\n\n"
     
     return content
 
