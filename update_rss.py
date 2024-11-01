@@ -46,6 +46,7 @@ from github import Github
 import pytz
 import translators.server as tss
 import time
+import requests
 
 # 配置参数
 FERRO_KEYWORDS = [
@@ -58,6 +59,15 @@ ML_KEYWORDS = [
     "machine",
     "learning",
 ]
+
+ML_DFT_KEYWORDS = [
+    "machine learning",
+    "density functional"
+]
+
+
+# 企业微信机器人webhook
+WECHAT_WEBHOOK = os.getenv('WECHAT_WEBHOOK')
 
 # GitHub配置
 GITHUB_TOKEN = os.getenv('MY_GITHUB_TOKEN')
@@ -102,6 +112,8 @@ def get_category(title, description):
     
     if check_keywords(text, FERRO_KEYWORDS):
         return "ferro"
+    elif all(keyword.lower() in text for keyword in ML_DFT_KEYWORDS):
+        return "ML_DFT"
     elif check_keywords(text, ML_KEYWORDS):
         return "ML"
     return None
@@ -127,6 +139,19 @@ def format_content(entry):
     
     return content
 
+def send_to_wechat(content):
+    """发送消息到企业微信群"""
+    headers = {'Content-Type': 'application/json'}
+    data = {
+        "msgtype": "markdown",
+        "markdown": {
+            "content": content
+        }
+    }
+    response = requests.post(WECHAT_WEBHOOK, headers=headers, json=data)
+    if response.status_code != 200:
+        print(f"Failed to send message to WeChat: {response.text}")
+
 def main():
     g = Github(GITHUB_TOKEN)
     repo = g.get_repo(REPO_NAME)
@@ -138,6 +163,7 @@ def main():
     # 为每个类别创建单独的内容列表
     ferro_content = []
     ml_content = []
+    ml_dft_content = []
     
     for feed_url in RSS_FEEDS:
         try:
@@ -167,13 +193,15 @@ def main():
                             ferro_content.append(formatted_content)
                         elif category == "ML":
                             ml_content.append(formatted_content)
+                        elif category == "ML_DFT":
+                            ml_dft_content.append(formatted_content)
                         print(f"Found {category} content: {title}")
                 
         except Exception as e:
             print(f"Error processing feed {feed_url}: {str(e)}")
     
     # 处理和保存每个类别的内容
-    for category, content_list in [("ferro", ferro_content), ("ML", ml_content)]:
+    for category, content_list in [("ferro", ferro_content), ("ML", ml_content), ("ML_DFT", ml_dft_content)]:
         if content_list:
             all_content = "\n---\n".join(content_list)
             
@@ -216,10 +244,14 @@ def main():
                     
                 print(f"Successfully updated {category} content for {today}")
                 
+                # 发送到企业微信群
+                wechat_content = f"# {category.upper()} 更新 ({today})\n\n{all_content[:2000]}..."  # 限制长度
+                send_to_wechat(wechat_content)
+                
             except Exception as e:
                 print(f"Error occurred while saving {category} content: {str(e)}")
     
-    if not ferro_content and not ml_content:
+    if not ferro_content and not ml_content and not ml_dft_content:
         print("No relevant content found today")
 
 if __name__ == "__main__":
