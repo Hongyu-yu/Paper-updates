@@ -140,17 +140,24 @@ def format_content(entry):
     return content
 
 def send_to_wechat(content):
-    """发送消息到企业微信群"""
+    """发送消息到企业微信群，如果内容过长则分割成多条消息"""
     headers = {'Content-Type': 'application/json'}
-    data = {
-        "msgtype": "markdown",
-        "markdown": {
-            "content": content
+    max_length = 2000  # 企业微信单条消息的最大长度
+
+    # 将内容分割成多个部分
+    parts = [content[i:i+max_length] for i in range(0, len(content), max_length)]
+
+    for i, part in enumerate(parts):
+        data = {
+            "msgtype": "markdown",
+            "markdown": {
+                "content": f"(Part {i+1}/{len(parts)})\n\n{part}"
+            }
         }
-    }
-    response = requests.post(WECHAT_WEBHOOK, headers=headers, json=data)
-    if response.status_code != 200:
-        print(f"Failed to send message to WeChat: {response.text}")
+        response = requests.post(WECHAT_WEBHOOK, headers=headers, json=data)
+        if response.status_code != 200:
+            print(f"Failed to send message part {i+1} to WeChat: {response.text}")
+        time.sleep(1)  # 添加短暂延迟以避免频率限制
 
 def main():
     g = Github(GITHUB_TOKEN)
