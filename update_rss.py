@@ -11,10 +11,24 @@ RSS_FEEDS = [
     'https://www.nature.com/nature.rss',
     "https://www.nature.com/natcomputsci.rss",
     "https://www.nature.com/nchem.rss",
-    "http://www.nature.com/nphys/journal/vaop/ncurrent/rss.rdf",
+    "https://www.nature.com/natmachintell.rss",
+    "https://www.nature.com/natrevmats.rss",
+    "https://www.nature.com/nphys.rss",
+    "https://www.nature.com/natrevchem.rss",
+    "https://www.nature.com/natelectron.rss",
+    "https://www.nature.com/nnano.rss",
+    "https://www.nature.com/nphoton.rss",
+    "https://www.nature.com/natrevphys.rss",
     "https://www.nature.com/npjcompumats.rss",
     "https://academic.oup.com/rss/site_5332/3198.xml",
     "https://rss.sciencedirect.com/publication/science/20959273",
+    "http://feeds.feedburner.com/acs/jacsat",
+    "https://pubs.acs.org/action/showFeed?type=axatoc&feed=rss&jc=ancac3",
+    "https://onlinelibrary.wiley.com/action/showFeed?jc=15213773&type=etoc&feed=rss",
+    "https://pubs.acs.org/action/showFeed?type=axatoc&feed=rss&jc=nalefd",
+    "https://www.annualreviews.org/action/showFeed?ui=45mu4&mi=3fndc3&ai=68t8&jc=conmatphys&type=etoc&feed=atom",
+    "https://www.annualreviews.org/action/showFeed?ui=45mu4&mi=3fndc3&ai=sy&jc=physchem&type=etoc&feed=atom",
+    "https://pubs.acs.org/action/showFeed?type=axatoc&feed=rss&jc=jpclcd",
     'https://www.pnas.org/rss/Physics.xml',
     'https://www.pnas.org/rss/Applied_Physical_Sciences.xml',
     "https://pubs.acs.org/action/showFeed?type=axatoc&feed=rss&jc=jctcce",
@@ -25,6 +39,7 @@ RSS_FEEDS = [
     "http://feeds.aps.org/rss/recent/prmaterials.xml",
     "http://feeds.aps.org/rss/recent/prresearch.xml",
     "http://feeds.aps.org/rss/recent/prb.xml",
+    "https://pubs.acs.org/action/showFeed?type=axatoc&feed=rss&jc=chreay",
     'http://feeds.feedburner.com/acs/nalefd',
     'http://feeds.feedburner.com/acs/achre4',
     "http://feeds.feedburner.com/physicstodaynews",
@@ -239,6 +254,49 @@ def main():
                     continue
 
                 send_to_wechat(wechat_content, webhook_url)
+                
+            except Exception as e:
+                print(f"Error occurred while saving {category} content: {str(e)}")
+
+
+            try:
+                # 确保类别文件夹存在
+                folder_path = f"{category}/{year_month}"
+                try:
+                    repo.get_contents(folder_path)
+                except:
+                    try:
+                        repo.get_contents(f"{category}")
+                    except:
+                        repo.create_file(
+                            f"{category}/.gitkeep",
+                            f"Create folder for {category}",
+                            ""
+                        )
+                    repo.create_file(
+                        f"{folder_path}/.gitkeep",
+                        f"Create folder for {category}/{year_month}",
+                        ""
+                    )
+                
+                # 创建或更新文件
+                file_path = f"{folder_path}/{today}.md"
+                try:
+                    file = repo.get_contents(file_path)
+                    repo.update_file(
+                        file_path,
+                        f"Update {category} content for {today}",
+                        all_content,
+                        file.sha
+                    )
+                except:
+                    repo.create_file(
+                        file_path,
+                        f"Add {category} content for {today}",
+                        all_content
+                    )
+                    
+                print(f"Successfully updated {category} content for {today}")
                 
             except Exception as e:
                 print(f"Error occurred while saving {category} content: {str(e)}")
