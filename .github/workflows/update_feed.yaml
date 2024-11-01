@@ -24,4 +24,5 @@ jobs:
     - name: Run update script
       env:
         MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+        WECHAT_WEBHOOK: ${{ secrets.WECHAT_WEBHOOK }}
       run: python update_rss.py
