@@ -68,7 +68,7 @@ FERRO_KEYWORDS = [
     "ferroelec",
     "ferromag",
     "ferroic",
-    "MAGNET",
+    "magnetic",
 ]
 
 ML_KEYWORDS = [
@@ -131,12 +131,12 @@ def get_category(title, description):
     """确定文章属于哪个类别"""
     text = f"{title} {description}".lower()
     
-    if check_keywords(text, FERRO_KEYWORDS):
+    if check_keywords(text, ML_KEYWORDS):
+        return "ML"
+    elif check_keywords(text, FERRO_KEYWORDS):
         return "ferro"
     elif check_keywords(text, DFT_KEYWORDS):
         return "DFT"
-    elif check_keywords(text, ML_KEYWORDS):
-        return "ML"
     return None
 
 def format_content(entry):
@@ -164,7 +164,7 @@ def format_content(entry):
 def send_to_wechat(content, webhook_url):
     """发送消息到企业微信群，如果内容过长则分割成多条消息"""
     headers = {'Content-Type': 'application/json'}
-    max_length = 500  # 企业微信单条消息的最大长度
+    max_length = 1500  # 企业微信单条消息的最大长度
 
     # 将内容分割成多个部分
     parts = [content[i:i+max_length] for i in range(0, len(content), max_length)]
@@ -207,6 +207,7 @@ def main():
                     entry_date = datetime(*entry.updated_parsed[:6]).date()
                 else:
                     # 如果没有日期信息，直接读取这个 entry
+                    print(f"Fail to load the date of {entry}")
                     entry_date = now.date()
                 
                 # 检查是否是今天的内容
