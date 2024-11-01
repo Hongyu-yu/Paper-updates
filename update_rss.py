@@ -142,15 +142,15 @@ def format_content(entry):
 def send_to_wechat(content):
     """发送消息到企业微信群，如果内容过长则分割成多条消息"""
     headers = {'Content-Type': 'application/json'}
-    max_length = 2000  # 企业微信单条消息的最大长度
+    max_length = 1000  # 企业微信单条消息的最大长度
 
     # 将内容分割成多个部分
     parts = [content[i:i+max_length] for i in range(0, len(content), max_length)]
 
     for i, part in enumerate(parts):
         data = {
-            "msgtype": "markdown",
-            "markdown": {
+            "msgtype": "text",
+            "text": {
                 "content": f"(Part {i+1}/{len(parts)})\n\n{part}"
             }
         }
