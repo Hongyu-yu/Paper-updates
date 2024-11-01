@@ -26,5 +26,5 @@ jobs:
         MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
         WECHAT_WEBHOOK_FERRO: ${{ secrets.WECHAT_WEBHOOK_FERRO }}
         WECHAT_WEBHOOK_ML: ${{ secrets.WECHAT_WEBHOOK_ML }}
-        WECHAT_WEBHOOK_ML_DFT: ${{ secrets.WECHAT_WEBHOOK_ML_DFT }}
+        WECHAT_WEBHOOK_DFT: ${{ secrets.WECHAT_WEBHOOK_DFT }}
       run: python update_rss.py
