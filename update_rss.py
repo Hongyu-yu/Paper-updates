@@ -122,7 +122,7 @@ def format_content(entry):
         # content += f"## Original Summary\n{entry.summary}\n\n"
         summary_zh = translate_text(entry.summary)
         # if summary_zh != entry.summary:
-        content += f"## 摘要翻译\n{summary_zh}\n\n"
+        content += f"{summary_zh}\n\n"
     
     return content
 
