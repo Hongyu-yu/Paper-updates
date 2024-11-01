@@ -2,7 +2,7 @@ name: Update RSS Content
 
 on:
   schedule:
-    - cron: '0 4,22 * * *'  # 每天在UTC时间1:00运行（对应北京时间9:00）
+    - cron: '0 0 * * *'  # 每天在UTC时间22:00运行（对应北京时间8:00）
   workflow_dispatch:  # 允许手动触发
 
 jobs:
