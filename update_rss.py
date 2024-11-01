@@ -53,7 +53,7 @@ FERRO_KEYWORDS = [
     "ferroelec",
     "ferromag",
     "ferroic",
-    "MAGNETIC",
+    "MAGNET",
 ]
 
 ML_KEYWORDS = [
@@ -64,7 +64,7 @@ ML_KEYWORDS = [
 
 DFT_KEYWORDS = [
     "NONADABATIC",
-    "QUANTUM DYNAMICS",
+    "QUANTUM DYNAMIC",
     "TDDFT",
     "TIME DEPENDENT DENSITY",
 ]
