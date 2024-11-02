@@ -55,7 +55,7 @@ RSS_FEEDS = [
 
 import feedparser
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 import re
 from github import Github
 import pytz
@@ -208,10 +208,10 @@ def main():
                 else:
                     # 如果没有日期信息，直接读取这个 entry
                     print(f"Fail to load the date of {entry}")
-                    entry_date = now.date()
+                    entry_date = now.date() - timedelta(days=1)
                 
                 # 检查是否是今天的内容
-                if entry_date == now.date():
+                if entry_date == now.date() - timedelta(days=1):
                     title = entry.get('title', '')
                     description = entry.get('description', '')
                     
