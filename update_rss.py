@@ -43,6 +43,7 @@ RSS_FEEDS = [
     'http://feeds.feedburner.com/acs/nalefd',
     'http://feeds.feedburner.com/acs/achre4',
     "http://feeds.feedburner.com/physicstodaynews",
+    'https://iopscience.iop.org/journal/rss/2632-2153',
     'https://onlinelibrary.wiley.com/action/showFeed?jc=15214095&type=etoc&feed=rss',
     'https://onlinelibrary.wiley.com/action/showFeed?jc=16163028&type=etoc&feed=rss',
     'https://onlinelibrary.wiley.com/action/showFeed?jc=21983844&type=etoc&feed=rss',
@@ -208,10 +209,10 @@ def main():
                 else:
                     # 如果没有日期信息，直接读取这个 entry
                     print(f"Fail to load the date of {entry}")
-                    entry_date = now.date() - timedelta(days=1)
+                    entry_date = now.date()
                 
                 # 检查是否是今天的内容
-                if entry_date == now.date() - timedelta(days=1):
+                if entry_date == now.date():
                     title = entry.get('title', '')
                     description = entry.get('description', '')
                     
