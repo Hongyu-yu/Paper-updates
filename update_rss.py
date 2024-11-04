@@ -19,6 +19,7 @@ RSS_FEEDS = [
     "https://www.nature.com/nnano.rss",
     "https://www.nature.com/nphoton.rss",
     "https://www.nature.com/natrevphys.rss",
+    "https://www.nature.com/ncomms.rss",
     "https://www.nature.com/npjcompumats.rss",
     "https://academic.oup.com/rss/site_5332/3198.xml",
     "https://rss.sciencedirect.com/publication/science/20959273",
