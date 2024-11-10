@@ -75,7 +75,6 @@ FERRO_KEYWORDS = [
 
 ML_KEYWORDS = [
     "neural network",
-    "machine",
     "learning",
 ]
 
@@ -84,6 +83,7 @@ DFT_KEYWORDS = [
     "QUANTUM DYNAMIC",
     "TDDFT",
     "TIME DEPENDENT DENSITY",
+    "density functional",
 ]
 
 
