@@ -64,6 +64,7 @@ import pytz
 import translators.server as tss
 import time
 import requests
+from bs4 import BeautifulSoup
 
 # 配置参数
 FERRO_KEYWORDS = [
@@ -242,8 +243,8 @@ def main():
                     entry_date, authors = Science_Bulletin_extract(entry)
                 else:
                     # 如果没有日期信息，直接读取这个 entry
-                    print(f"Fail to load the date of {entry}")
                     entry_date = now.date() - timedelta(days = 1)
+                    print(f"Fail to load the date of {entry}, set as {entry_date}")
                 
                 # 检查是否是昨天的内容
                 if entry_date == now.date() - timedelta(days = 1):
