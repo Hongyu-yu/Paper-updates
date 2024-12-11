@@ -154,6 +154,9 @@ def format_content(entry):
     
     content += f"Link: {entry.link}\n\n"
     
+    authors = entry.dc_creator.split(', ')
+    content += f"**Authors:** {', '.join(authors)}\n\n"
+    
     if hasattr(entry, 'summary'):
         # content += f"## Original Summary\n{entry.summary}\n\n"
         # summary = translate_text(entry.summary)
