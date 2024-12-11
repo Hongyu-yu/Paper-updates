@@ -155,9 +155,8 @@ def format_content(entry):
     
     content += f"Link: {entry.link}\n\n"
     
-    if hasattr(entry, 'dc_creator'):
-        authors = entry.dc_creator.split(', ')
-        content += f"**Authors:** {', '.join(authors)}\n\n"
+    if hasattr(entry, 'author'):
+        content += f"**Authors:** {entry.author}\n\n"
     else:
         print('Missing author information: ', entry)
     
@@ -239,8 +238,8 @@ def main():
                     entry_date = datetime(*entry.published_parsed[:6]).date()
                 elif 'updated_parsed' in entry:
                     entry_date = datetime(*entry.updated_parsed[:6]).date()
-                elif 'Science Bulletin' in entry:
-                    entry_date, authors = Science_Bulletin_extract(entry)
+                elif 'Science Bulletin' in str(entry):
+                    entry_date, authors = Science_Bulletin_extract(str(entry))
                 else:
                     # 如果没有日期信息，直接读取这个 entry
                     entry_date = now.date() - timedelta(days = 1)
