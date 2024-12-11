@@ -186,6 +186,31 @@ def send_to_wechat(content, webhook_url):
             print(f"Failed to send message part {i+1} to WeChat: {response.text}")
         time.sleep(1)  # 添加短暂延迟以避免频率限制
 
+def Science_Bulletin_extract(rss_entry):
+    """Extract publication date as a datetime object and author information from RSS entry."""
+    # Parse the entry using BeautifulSoup
+    soup = BeautifulSoup(rss_entry, 'xml')
+    
+    # Extract the description
+    description = soup.find('description').text
+    
+    # Extract the publication date using regex
+    date_match = re.search(r'Publication date:\s*(.*)', description)
+    publication_date_str = date_match.group(1) if date_match else "Date not found"
+    
+    # Convert the publication date string to a datetime object
+    # Assuming the format is "Available online DD Month YYYY"
+    try:
+        publication_date = publication_date_str.replace('Available online ', '').replace('</p>', '')
+    except ValueError:
+        publication_date = None  # Handle cases where the date format is unexpected
+    
+    # Extract authors using regex
+    author_match = re.search(r'Author\(s\):\s*(.*)', description)
+    authors = author_match.group(1).split(', ') if author_match else ["Authors not found"]
+    
+    return publication_date, authors
+
 def main():
     g = Github(GITHUB_TOKEN)
     repo = g.get_repo(REPO_NAME)
@@ -210,13 +235,15 @@ def main():
                     entry_date = datetime(*entry.published_parsed[:6]).date()
                 elif 'updated_parsed' in entry:
                     entry_date = datetime(*entry.updated_parsed[:6]).date()
+                elif 'Science Bulletin' in entry:
+                    entry_date, authors = Science_Bulletin_extract(entry)
                 else:
                     # 如果没有日期信息，直接读取这个 entry
                     print(f"Fail to load the date of {entry}")
-                    entry_date = now.date()
+                    entry_date = now.date() - timedelta(days = 1)
                 
-                # 检查是否是今天的内容
-                if entry_date == now.date():
+                # 检查是否是昨天的内容
+                if entry_date == now.date() - timedelta(days = 1):
                     title = entry.get('title', '')
                     description = entry.get('description', '')
                     
