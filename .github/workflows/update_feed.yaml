@@ -27,4 +27,5 @@ jobs:
         WECHAT_WEBHOOK_FERRO: ${{ secrets.WECHAT_WEBHOOK_FERRO }}
         WECHAT_WEBHOOK_ML: ${{ secrets.WECHAT_WEBHOOK_ML }}
         WECHAT_WEBHOOK_DFT: ${{ secrets.WECHAT_WEBHOOK_DFT }}
-      run: python update_rss.py; sleep 10; python update_rss.py
+      run: python update_rss.py
+      
