@@ -2,7 +2,7 @@ name: Update RSS Content
 
 on:
   schedule:
-    - cron: '0 4 * * *'  # 每天在UTC时间1:00运行
+    - cron: '0 1 * * *'  # 每天在UTC时间1:00运行
   workflow_dispatch:  # 允许手动触发
 
 jobs:
@@ -27,4 +27,4 @@ jobs:
         WECHAT_WEBHOOK_FERRO: ${{ secrets.WECHAT_WEBHOOK_FERRO }}
         WECHAT_WEBHOOK_ML: ${{ secrets.WECHAT_WEBHOOK_ML }}
         WECHAT_WEBHOOK_DFT: ${{ secrets.WECHAT_WEBHOOK_DFT }}
-      run: python update_rss.py
+      run: python update_rss.py; sleep 10; python update_rss.py
